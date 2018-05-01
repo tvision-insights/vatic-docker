@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  vatic:
+    build:
+      context: ./
+    image: vatic
+    restart: unless-stopped
+    container_name: vatic
+    volumes:
+      - "${VATIC_DATA_DIR}:/root/vatic/data"
+    ports:
+      - "80:80"
