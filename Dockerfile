@@ -78,4 +78,4 @@ COPY scripts /root/vatic
 
 EXPOSE 80
 
-ENTRYPOINT ["/root/vatic/startup.sh"]
+ENTRYPOINT ["/root/vatic/start_and_block.sh"]
