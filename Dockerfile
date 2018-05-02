@@ -39,6 +39,7 @@ RUN apt-get update                                                              
 
 RUN pip install --force-reinstall                                                   \
                 --upgrade --user argparse                                           \
+                                 awscli                                             \
                                  cython==0.20                                       \
                                  munkres==1.0.7                                     \
                                  mysql-python==1.2.5                                \
