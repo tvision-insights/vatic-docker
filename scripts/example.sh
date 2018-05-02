@@ -1,9 +1,25 @@
 #!/bin/bash
 
+ID=$1
+TODOVIDEOPATH=/root/vatic/data/videos_in/$ID
+DONEVIDEOPATH=/root/vatic/data/videos_out/$ID
+FRAMEPATH="/root/vatic/data/"$ID"_frames_in"
+
+mkdir -p $FRAMEPATH
+mkdir -p $DONEVIDEOPATH
+
+cd /root/vatic
+for i in $( ls $TODOVIDEOPATH); do
+    turkic extract $TODOVIDEOPATH/$i $FRAMEPATH --width 720 --height 480
+    mv $TODOVIDEOPATH/$i $DONEVIDEOPATH/
+done
+root@8cc6fdfc5066:~/vatic# cat example.sh 
+#!/bin/bash
+
 # Settings
-ID=currentvideo
-VIDEOPATH=/root/vatic/data/videos_in
-ANNOTATEDFRAMEPATH=/root/vatic/data/frames_in
+ID=$1
+VIDEOPATH=/root/vatic/data/videos_in/$ID
+ANNOTATEDFRAMEPATH="/root/vatic/data/"$ID"_frames_in"
 TURKOPS="--offline --title HelloTurk!"
 LABEL_FILE=/root/vatic/data/labels.txt
 if [ -f "$LABEL_FILE" ]
@@ -41,19 +57,19 @@ then
     exit 1
 fi
 # Start database and server
-/root/vatic/startup.sh
+#/root/vatic/startup.sh
 
 # Convert videos that need to be converted
-/root/vatic/extract.sh
+/root/vatic/extract.sh $ID
 
 # Set up folders
 mkdir -p $ANNOTATEDFRAMEPATH
 cd /root/vatic
 
 # load frames and publish. This will print out access URLs.
-turkic load $ID $ANNOTATEDFRAMEPATH $LABELS $TURKOPS
+turkic load $ID $ANNOTATEDFRAMEPATH $LABELS $TURKOPS --blow-radius 0
 
-mkdir -p /root/vatic/public/directory
+#mkdir -p /root/vatic/public/directory
 
 if [ -f /root/vatic/data/db.mysql ];
 then
@@ -65,17 +81,17 @@ fi
 # a series of html links. Save this at the /directory page in the website.
 { turkic publish --offline |\
   tee /dev/fd/3 | sed "s|http://localhost|<a href=\.\.|" |\
-                  sed "s|offline|offline> Video Segment <\/a><br>|"  > /root/vatic/public/directory/index.html; } 3>&1
+                  sed "s|offline|offline> Video Segment $ID <\/a><br>|"  >> /root/vatic/public/directory/index.html; } 3>&1
 
 
 # add some user interface controls
 #cat $PWD/ascripts/vatic_index.html >> /root/vatic/public/index.html
-cat $PWD/ascripts/myhtml.html >> /root/vatic/public/directory/index.html
-cp $PWD/ascripts/myphp.php  /root/vatic/public/directory
+#cat $PWD/ascripts/myhtml.html >> /root/vatic/public/directory/index.html
+#cp $PWD/ascripts/myphp.php  /root/vatic/public/directory
 chgrp -R www-data /root/vatic/data
 chmod 775 /root/vatic/data
 
 
 # open up a bash shell on the server
 
-/bin/bash
+#/bin/bash

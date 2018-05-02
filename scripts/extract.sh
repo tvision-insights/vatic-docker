@@ -1,8 +1,9 @@
 #!/bin/bash
 
-TODOVIDEOPATH=/root/vatic/data/videos_in
-DONEVIDEOPATH=/root/vatic/data/videos_out
-FRAMEPATH=/root/vatic/data/frames_in
+ID=$1
+TODOVIDEOPATH=/root/vatic/data/videos_in/$ID
+DONEVIDEOPATH=/root/vatic/data/videos_out/$ID
+FRAMEPATH="/root/vatic/data/"$ID"_frames_in"
 
 mkdir -p $FRAMEPATH
 mkdir -p $DONEVIDEOPATH
