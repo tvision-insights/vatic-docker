@@ -69,7 +69,8 @@ RUN /etc/init.d/mysql start                                                     
     turkic setup --database                                                      && \
     turkic setup --public-symlink
 
-RUN chown -R 755 /root/vatic/public                                              && \
+RUN chown -R 755 /root/vatic/public                                                 \
+                 /root/vatic/*.sh                                                && \
     find /root -type d -exec chmod 755 {} +                                      && \
     chmod -R 775 /var/www                                                        && \
     apache2ctl restart
